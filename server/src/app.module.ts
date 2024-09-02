@@ -5,6 +5,9 @@ import { envs } from './config';
 // import { Message } from './message/message.entity';
 // import { AuthModule } from './auth/auth.module';
 // import { ChatModule } from './chat/chat.module';
+import { UserModule } from './user/user.module';
+import { MessageModule } from './message/message.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -18,6 +21,9 @@ import { envs } from './config';
       autoLoadEntities: true,
       synchronize: true, // Set to true for development
     }),
+    UserModule,
+    MessageModule,
+    AuthModule,
     // AuthModule,
     // ChatModule,
   ],
