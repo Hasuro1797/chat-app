@@ -101,7 +101,7 @@ curl -X POST http://localhost:3000/api/auth/login -d "username=testuser&password
 ```
 
 3. Usa el token JWT obtenido para conectarte y enviar mensajes mediante client.mjs.
-   Para probar con el client.mjs debes cambiar el usuario y la contraseña en la linea 18 del archivo:
+   Para probar con el client.mjs debes cambiar el usuario y la contraseña en la linea 18 del archivo con el usuario que te registraste en la base de datos:
 
 ```
 const token = await authenticate([tu usuario registrado], [tu contraseña]);
