@@ -1,8 +1,10 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import {
   BadRequestException,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as bcrypt from 'bcryptjs';
 import { CreateUserDto } from 'src/user/dto/create-user.dto';
@@ -15,6 +17,7 @@ export class AuthService {
   constructor(
     @InjectRepository(User)
     private userRepository: Repository<User>,
+    private readonly jwtService: JwtService,
   ) {}
   async register(createAuthDto: CreateUserDto) {
     const userFound = await this.userRepository.findOne({
@@ -31,27 +34,52 @@ export class AuthService {
       username: createAuthDto.username,
       password: hasedPassword,
     });
-    return this.userRepository.save(newUser);
+
+    const result = await this.userRepository.save(newUser);
+
+    const payload = {
+      username: newUser.username,
+      id: newUser.id,
+    };
+    const token = await this.createToken(payload);
+    return {
+      id: result.id,
+      username: result.username,
+      token,
+    };
   }
 
-  async validateUser(usercredentialDto: LogInUserDto) {
-    const user = await this.userRepository.findOne({
+  async loginUser(usercredentialDto: LogInUserDto) {
+    const { password, ...rest } = await this.userRepository.findOne({
       where: { username: usercredentialDto.username },
     });
 
-    if (!user) {
+    if (!rest.username) {
       throw new NotFoundException('User not found');
     }
 
     const isPasswordValid = await bcrypt.compare(
       usercredentialDto.password,
-      user.password,
+      password,
     );
 
     if (!isPasswordValid) {
       throw new BadRequestException('Invalid password');
     }
+    const payload = {
+      username: rest.username,
+      id: rest.id,
+    };
 
-    return user;
+    const token = await this.createToken(payload);
+
+    return {
+      ...rest,
+      token,
+    };
+  }
+
+  private async createToken(payload: any) {
+    return await this.jwtService.signAsync(payload);
   }
 }
