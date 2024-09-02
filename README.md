@@ -31,7 +31,7 @@ Antes de comenzar, asegúrate de tener instalado lo siguiente en tu máquina:
 1. Clona este repositorio en tu máquina local.
 
 ```bash
-git clone https://github.com/tu-usuario/chat-app.git
+git clone https://github.com/Hasuro1797/chat-app.git
 cd chat-app
 ```
 
@@ -52,7 +52,9 @@ yarn
 ```
 CREATE DATABASE [your database name];
 ```
+
 4. Crea un archivo `.env` parecido al archivo `.env.template` en la raíz del proyecto y añade la configuración de la base de datos y la clave secreta de JWT:
+
 ```
 PORT=3000
 DATABASE_PORT=5432
@@ -62,10 +64,13 @@ DATABASE_HOST=localhost
 DATA_BASE_NAME=chatdb
 JWT_SECRET=yoursecretKey
 ```
+
 6. Inicia el servidor de NestJS.
+
 ```
 yarn start:dev
 ```
+
 El servidor debería estar corriendo en http://localhost:3000.
 
 ## Probar la funcionalidad del chat con el cliente Node.js
@@ -78,6 +83,7 @@ Ejecuta el archivo client.js.
 ```
 node scripts/client.mjs
 ```
+
 El cliente se conectará al servidor WebSocket, enviará un mensaje y recibirá respuestas en tiempo real.
 
 ### Ejemplo del flujo de trabajo
@@ -87,12 +93,15 @@ El cliente se conectará al servidor WebSocket, enviará un mensaje y recibirá 
 ```
 curl -X POST http://localhost:3000/api/auth/register -d "username=testuser&password=testpass"
 ```
+
 2. Inicia sesión con el usuario registrado para obtener un token JWT.
+
 ```
 curl -X POST http://localhost:3000/api/auth/login -d "username=testuser&password=testpass"
 ```
+
 3. Usa el token JWT obtenido para conectarte y enviar mensajes mediante client.mjs.
-Para probar con el client.mjs debes cambiar el usuario y la contraseña en la linea 18 del archivo:
+   Para probar con el client.mjs debes cambiar el usuario y la contraseña en la linea 18 del archivo:
 
 ```
 const token = await authenticate([tu usuario registrado], [tu contraseña]);
