@@ -7,7 +7,7 @@ export class Message {
   id: number;
 
   @Column()
-  conntent: string;
+  content: string;
 
   @ManyToOne(() => User, (user) => user.id)
   user: User;
