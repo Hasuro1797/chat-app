@@ -31,7 +31,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
       const token = client.handshake.headers.authorization?.split(' ')[1];
       const payload = this.jwtService.verify(token);
       const user = await this.userRepository.findOne({
-        where: { username: payload.sub },
+        where: { username: payload.username },
       });
       if (!user) {
         client.disconnect();
@@ -40,7 +40,6 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
       client['user'] = user;
       console.log(`Client connected: ${client.id}`);
     } catch (e) {
-      console.error(e);
       client.disconnect();
     }
   }
